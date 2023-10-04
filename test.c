@@ -1,5 +1,7 @@
 #include<mlx.h>
 #include<math.h>
+#include<stdlib.h>
+#include<stdio.h>
 
 
 int	main(void)
@@ -8,21 +10,27 @@ int	main(void)
     void	*mlx_win;
     int     x;
     int     y;
-    double  d;
+    int     w;
+    int     h;
+    float   r;
 
 	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 500, 500, "The abyss");
-
+    w = 500;
+    h = 500;
+	mlx_win = mlx_new_window(mlx, w, h, "The abyss");
+    x = 0;
     y = 500;
-    d = 500;
-    while(y >= 250)
-    {   
-        x = 250;
-        while((double)y <= d )
+    r = 250.000000;
+    while(y >= 0)
+    {
+        x = 0;
+        while(x <= 500)
         {
-            mlx_pixel_put(mlx,mlx_win,x,y,0xFF0000);
+            if(sqrt (pow (abs (x - 250),2) + pow (abs (y - 250),2)) <= r)
+            {
+                mlx_pixel_put(mlx,mlx_win,x,y,0xFF0000);
+            }
             x++;
-            d = sqrt(pow(250,2) + 250 + 250 - pow(x,2));     
         }
         y--;
     }
