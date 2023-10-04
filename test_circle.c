@@ -19,14 +19,14 @@ int	main(void)
     h = 500;
 	mlx_win = mlx_new_window(mlx, w, h, "The abyss");
     x = 0;
-    y = 500;
-    r = 250.000000;
+    y = h;
+    r = 250;
     while(y >= 0)
     {
         x = 0;
-        while(x <= 500)
+        while(x <= w)
         {
-            if(sqrt (pow (abs (x - 250),2) + pow (abs (y - 250),2)) <= r)
+            if(sqrt (pow (abs (x - (w/2)),2) + pow (abs (y - (h/2)),2)) <= r)
             {
                 mlx_pixel_put(mlx,mlx_win,x,y,0xFF0000);
             }
