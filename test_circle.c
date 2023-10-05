@@ -32,7 +32,13 @@ int close(t_data *data)
     printf("ventana destruida\n");
     return(0);
 }
+void	img_pix_put(t_img *img, int x, int y, int color)
+{
+    char    *pixel;
 
+    pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
+    *(int *)pixel = color;
+}
 
 int render(t_data *data)
 {
@@ -41,9 +47,9 @@ int render(t_data *data)
     float r;
 
     x = 0;
-    y = data->h;
+    y = 0;
     r = data->h/2;
-    while(y >= 0)
+    while(y <= data->h)
     {
         x = 0;
         while(x <= data->w)
@@ -54,7 +60,7 @@ int render(t_data *data)
             }
             x++;
         }
-        y--;
+        y++;
     }
     return(0);
 }
