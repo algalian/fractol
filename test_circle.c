@@ -35,7 +35,7 @@ int close(t_data *data)
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
     char    *pixel;
-
+    
     pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
     *(int *)pixel = color;
 }
@@ -56,12 +56,13 @@ int render(t_data *data)
         {
             if(sqrt (pow (abs (x - (data->w/2)),2) + pow (abs (y - (data->h/2)),2)) <= r)
             {
-                mlx_pixel_put(data->mlx, data->mlx_win, x, y, 0xFF0000);
+                img_pix_put(&data->img,  x, y, 0xFF0000);
             }
             x++;
         }
         y++;
     }
+    mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.mlx_img, 0, 0);
     return(0);
 }
 
