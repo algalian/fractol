@@ -1,57 +1,53 @@
 #include"fractol.h"
 
-char **move(int a, int b, char **s, cmplx trasl)
+char **move(vector v)
 {
-    char **move;
     int i;
     int j;
 
-    a += trasl.a;
-    b += trasl.b;
-    while(i <= a * 2)
+    v.a += v.a;
+    v.b += v.b;
+    i = 0;
+    while(i <= v.a)
     {
         j = 0;
-        while(j <= b * 2)
+        while(j <= v.b)
         {
-            if(set(move[i][j]) == 1)
-                move[i][j] = '1';
-            if(set(move[i][j]) == 0)
-                move[i][j] = '0';
+            if(set(v.prev[i][j]) == 1)
+                v.next[i][j] = '1';
+            if(set(v.prev[i][j]) == 0)
+                v.next[i][j] = '0';
             j++; 
         }
         i++;        
     }
-    return(move);
+    return(v.next);
 }
 
-char **zoom(int a, int b, char **next)
+char **zoom(vector v)
 {
-
+    
 }
-
-char **next(char **prev, cmplx trasl, int z)
+vector  parse_move(vector  v)
 {
-    char **next;
-    int     a;
-    int     b;
     int     i;
 
-    a = ft_strlen(prev[0]);
-    b = size_y(prev);
-    next = malloc(sizeof(char *) * (b + 1));
-    next[b+1] = NULL;
+    v.a = ft_strlen(v.prev[0]);
+    v.b = size_y(v.prev);
+    v.next = malloc(sizeof(char *) * (v.b + 1));
+    v.next[v.b + 1] = NULL;
     i = 0;
-    while(next[i])
+    while(v.next[i])
     {
-        next[i] = malloc(sizeof(char) * (a + 1));
-        next[i][a+1] = '\0';
+        v.next[i] = malloc(sizeof(char) * (v.a + 1));
+        v.next[i][v.a+1] = '\0';
         i++;
     }
-    if(!(abs(trasl.a) == 0 && abs(trasl.b) == 0))
-        next = move(a, b, prev, trasl);
-    if(abs(z) > 0)
-        next = zoom(a, b, next);
-    return(next);
+    if(!(abs(v.a) == 0 && abs(v.b) == 0))
+        v.next = move(v);
+    if(abs(v.z) > 0)
+        v.next = zoom(v);
+    return(v);
 }
 
 

@@ -8,14 +8,19 @@
 
 typedef struct complex
 {
-    float     a;
-    float     b;
+    float     x;
+    float     y;
 }	cmplx;
 
-typedef struct event
+typedef struct vector
 {
-    
-} ;
+    char   **next;
+    char   **prev;
+    int    a;
+    int    b;
+    int    z;
+    cmplx  t;
+} vector;
 int size_y(char **s);
 
 
