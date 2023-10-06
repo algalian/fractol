@@ -1,6 +1,6 @@
 #include"fractol.h"
 
-vector move(vector v)
+vector trasl(vector v)
 {
     int i;
     int j;
@@ -50,7 +50,7 @@ vector  parse_move(vector  v)
         i++;
     }
     if(!(abs(v.a) == 0 && abs(v.b) == 0))
-        v = move(v);
+        v = trasl(v);
     if(abs(v.z) > 0)
         v = zoom(v);
     return(v);
