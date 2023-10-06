@@ -4,6 +4,7 @@ vector trasl(vector v)
 {
     int i;
     int j;
+    
 
     i = 0;
     while(v.next[0][i])
