@@ -1,52 +1,58 @@
 #include"fractol.h"
 
-char **move(vector v)
+vector move(vector v)
 {
     int i;
     int j;
 
-    v.a += v.a;
-    v.b += v.b;
     i = 0;
-    while(i <= v.a)
+    while(v.next[0][i])
     {
-        j = 0;
-        while(j <= v.b)
-        {
-            if(set(v.prev[i][j]) == 1)
-                v.next[i][j] = '1';
-            if(set(v.prev[i][j]) == 0)
-                v.next[i][j] = '0';
-            j++; 
-        }
-        i++;        
+        if(set(v.next[0][i]) == 1)
+            v.next[0][i] = '1';
+        if(set(v.next[0][i]) == 0)
+            v.next[0][i] = '0';
+        i++;
     }
-    return(v.next);
+    j = 1;
+    while(v.prev[j - 1][i])
+    {
+        i = 0;
+        while(v.prev[j][i])
+        {
+            v.next[j][i] = v.prev[j][i];
+            i++;
+        }
+        j++;
+    }
+    ft_bzero(v.prev[j], WIDTH);
+    return(v);
 }
 
-char **zoom(vector v)
+vector zoom(vector v)
 {
+
+
     
 }
+
 vector  parse_move(vector  v)
 {
     int     i;
 
-    v.a = ft_strlen(v.prev[0]);
-    v.b = size_y(v.prev);
-    v.next = malloc(sizeof(char *) * (v.b + 1));
-    v.next[v.b + 1] = NULL;
+    v.next = malloc(sizeof(char *) * (HEIGHT + 1));
+    v.next[HEIGHT + 1] = NULL;
     i = 0;
     while(v.next[i])
     {
-        v.next[i] = malloc(sizeof(char) * (v.a + 1));
-        v.next[i][v.a+1] = '\0';
+        v.next[i] = malloc(sizeof(char) * (WIDTH + 1));
+        v.next[i][WIDTH + 1] = '\0';
         i++;
     }
     if(!(abs(v.a) == 0 && abs(v.b) == 0))
-        v.next = move(v);
+        v = move(v);
     if(abs(v.z) > 0)
-        v.next = zoom(v);
+        v = zoom(v);
     return(v);
 }
 
