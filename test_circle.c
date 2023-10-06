@@ -25,10 +25,12 @@ typedef struct s_data
 
 int close(t_data *data)
 {   
+
     /*printf("%p\n", data->mlx);
     printf("%p\n", data->mlx_win);*/
     mlx_clear_window(data->mlx,data->mlx_win);
-   // mlx_destroy_window(data->mlx, data->mlx_win);
+    //printf("%d\n",mlx_clear_window(data->mlx,data->mlx_win));
+    //mlx_destroy_window(data->mlx, data->mlx_win);
     printf("ventana destruida\n");
     return(0);
 }
