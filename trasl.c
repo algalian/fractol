@@ -52,23 +52,6 @@ int fractal_set(int j, int i) //regla inventada.
     return(1);
 }
 
-vector upp(vector v)
-{
-    int i;
-    int j;
-
-    i = 0;
-    j = 1;
-    while(j <= HEIGHT - 1)
-    {
-        ft_strlcpy(v.next[j],v.prev[j-1], WIDTH + 1);
-        j++;
-    }
-    v.next[j] = NULL;
-    return(v);
-
-}
-
 vector up(vector v)
 {
     int i;
@@ -84,7 +67,6 @@ vector up(vector v)
         i++;
     }
     v.next[0][i] = '\0';
-    i = 0;
     j = 1;
     while(j <= HEIGHT - 1)
     {
@@ -92,6 +74,30 @@ vector up(vector v)
         j++;
     }
     v.next[j] = NULL;
+    return(v);
+}
+
+vector  down(vector v)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while(v.prev[HEIGHT][i])
+    {
+        if(fractal_set(HEIGHT + 1, i) == 1)
+            v.next[HEIGHT][i] = '1';
+        if(fractal_set(HEIGHT + 1, i) == 0)
+            v.next[HEIGHT][i] = '0';
+        i++;
+    }
+    v.next[HEIGHT][i] = '\0';
+    j = 1;
+    while(j <= HEIGHT - 1)
+    {
+        ft_strlcpy(v.next[j],v.prev[j + 1], WIDTH + 1);
+        j++;  
+    }
     return(v);
 }
 
@@ -113,7 +119,7 @@ int main()
         v.next[i] = malloc(sizeof(char) * 4);
         i++;
     }
-    v = up(v);
+    v = down(v);
     i = 0;
     while(v.next[i])
     {
