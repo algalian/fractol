@@ -20,8 +20,6 @@ int fractal_set(int j, int i) //regla inventada.
     return(1);
 }
 
-
-
 vector up(vector v)
 {
     int i;
@@ -55,7 +53,7 @@ vector up(vector v)
     return(v);
 }
 
-int main()
+/*int main()
 {
     vector v;
     int i;
@@ -81,4 +79,4 @@ int main()
         i++;
     }
     return(0);
-}
+}*/
