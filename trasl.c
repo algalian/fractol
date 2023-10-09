@@ -20,24 +20,13 @@ int fractal_set(int j, int i) //regla inventada.
     return(1);
 }
 
-vector up(vector v)
+vector upp(vector v)
 {
     int i;
     int j;
 
     i = 0;
-    while(v.prev[0][i])
-    {
-        if(fractal_set(-1, i) == 1)
-            v.next[0][i] = '1';
-        if(fractal_set(-1, i) == 0)
-            v.next[0][i] = '0';
-        i++;
-    }
-    v.next[0][i] = '\0';
     j = 1;
-    i = 0;
-
     while(j <= HEIGHT - 1)
     {
         i = 0;
@@ -50,6 +39,25 @@ vector up(vector v)
         j++;
     }
     v.next[j] = NULL;
+    return(v);
+
+}
+
+vector up(vector v)
+{
+    int i;
+
+    i = 0;
+    while(v.prev[0][i])
+    {
+        if(fractal_set(-1, i) == 1)
+            v.next[0][i] = '1';
+        if(fractal_set(-1, i) == 0)
+            v.next[0][i] = '0';
+        i++;
+    }
+    v.next[0][i] = '\0';
+    v = upp(v); 
     return(v);
 }
 
