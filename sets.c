@@ -21,7 +21,6 @@ int fractal_set(float a, float b)
         a += x;
         b += y;
         m = sqrt(a*a + b*b);
-        printf("%f\n",m);
         p++;
     }
     if(p < 300)
@@ -38,6 +37,7 @@ int main()
 
     a = 1;
     b = 0;
+    printf("%f\n",a);
     printf("%i\n",fractal_set(a,b));
     return(0);
 }

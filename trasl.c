@@ -66,9 +66,9 @@ vector up(vector v)
     while(v.prev[0][i])
     {
         if(fractal_set(nextafterf(v.c.y, v.c.y + 1),v.c.x) == 1)
-            v.next[0][i] = '1';
+            v.next[0][i] = '*';
         if(fractal_set(nextafterf(v.c.y, v.c.y + 1),v.c.x) == 0)
-            v.next[0][i] = '0';
+            v.next[0][i] = ' ';
         i++;
     }
     v.next[0][i] = '\0';
