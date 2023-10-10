@@ -21,7 +21,7 @@ typedef struct vector
     int    a;
     int    b;
     int    z;
-    cmplx  t;
+    cmplx  c;
 } vector;
 int size_y(char **s);
 

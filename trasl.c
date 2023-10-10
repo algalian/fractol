@@ -1,7 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
 #define WIDTH 3
 #define HEIGHT 3
+
+typedef struct complex
+{
+    float     x;
+    float     y;
+}	cmplx;
+
 
 typedef struct vector
 {
@@ -9,6 +17,8 @@ typedef struct vector
     char   **prev;
     int    a;
     int    b;
+    int    z;
+    cmplx  c;
 } vector;
 
 size_t	ft_strlen(const char *s)
@@ -45,12 +55,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (ft_strlen(src));
 }
 
-int fractal_set(int j, int i) //regla inventada.  
-{
-    if((j + i) % 2 == 0)
-        return(0);
-    return(1);
-}
+
 
 vector up(vector v)
 {
@@ -60,9 +65,9 @@ vector up(vector v)
     i = 0;
     while(v.prev[0][i])
     {
-        if(fractal_set(-1, i) == 1)
+        if(fractal_set(nextafterf(v.c.y, v.c.y + 1),v.c.x) == 1)
             v.next[0][i] = '1';
-        if(fractal_set(-1, i) == 0)
+        if(fractal_set(nextafterf(v.c.y, v.c.y + 1),v.c.x) == 0)
             v.next[0][i] = '0';
         i++;
     }
@@ -77,7 +82,7 @@ vector up(vector v)
     return(v);
 }
 
-vector  down(vector v)
+/*vector  down(vector v)
 {
     int i;
     int j;
@@ -99,7 +104,7 @@ vector  down(vector v)
         j++;  
     }
     return(v);
-}
+}*/
 
 int main()
 {
@@ -119,7 +124,7 @@ int main()
         v.next[i] = malloc(sizeof(char) * 4);
         i++;
     }
-    v = down(v);
+    v = up(v);
     i = 0;
     while(v.next[i])
     {
