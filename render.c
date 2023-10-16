@@ -19,35 +19,69 @@ typedef struct s_data
     void	*mlx_win;
     int     w;
     int     h;
-    double   rank;
+    double  rank;
     t_img  img;
 }	t_data;
 
-
-
-int fractal_set(double a, double b)
+typedef struct complex
 {
-    double  x;
-    double  y;
-    double  m;
-    int     p;
+    float a;
+    float b;
+} complex;
 
-    x = a;
-    y = b;
-    m = 0;
+complex   ft_csum(complex x, complex y)
+{
+    complex z;
+    z.a = x.a + y.a;
+    z.b = x.b + y.b;
+    return(z);
+}
+complex ft_csqrt(complex x)
+{
+    complex z;
+
+    z.a = x.a * x.a - x.b * x.b;
+    z.b = 2 * x.a * x.b;
+    return(z);    
+}
+
+
+int fractal_set(complex c)
+{
+    int     p;
+    complex z;
+
+    z.a = 0;
+    z.b = 0;
     p = 0;
-    while(fabs(m) <= 2 && p <= 1000)
+    while(p <= 1000)
     {
-        a = ((a*a) - (b*b)) + x;
-        b = (2*a*b) + y;
-        m = sqrt(a*a + b*b);
+        z = ft_csqrt(z);
+        z = ft_csum(z,c);
+        if(hypot(z.a, z.b)>2)
+            return(0);
         p++;
+
     }
-    if(p < 1000)
-        return(0);
     return(1);
 }
 
+/*int is_in_mandelbrot(float complex c)
+{
+    float complex z;
+    int i;
+    
+    i = 0;
+    z = 0;
+    while ( i < 1000) 
+    {
+        z = z * z + c;
+        if (cabsf(z) > 2) 
+            return(0);
+        i++;
+    }
+    return (1); 
+}*/
 
 int close(t_data *data)
 {   
@@ -73,24 +107,24 @@ int render(t_data *data)
 {
     int x;
     int y;
-    double a;
-    double b;
+    complex c;
+
 
     y = 0;
-    b = data->rank/2;
-    while(y <= data->h && b >= -2)
+    c.b = data->rank/2;
+    while(y <= data->h && c.b >= -2)
     {
         x = 0;
-        a = -data->rank/2;
-        while(x <= data->w && a <= 2)
+        c.a = -data->rank/2;
+        while(x <= data->w && c.a <= 2)
         {
-            if(fractal_set(a,b) == 0)
+            if(fractal_set(c) == 0)
                 img_pix_put(&data->img,  x, y, 0x0000FF);
             x++;
-            a += (data->rank/data->h);
+            c.a += (data->rank/data->h);
         }
         y++;
-        b -= (data->rank/data->w);
+        c.b -= (data->rank/data->w);
     }
     mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.mlx_img, 0, 0);
     return(0);

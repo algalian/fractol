@@ -2,52 +2,46 @@
 #include<math.h>
 #include<stdio.h>
 
-int fractal_set(double a, double b)
+int fractal_set(float a, float b)
 {
-    double  x;
-    double  y;
-    double  m;
+    float  x;
+    float  y;
+    float  m;
     int     p;
-    FILE    *file;
 
-    fopen("somerule.txt","w");
     x = a;
     y = b;
-    m = 0;
+    m = sqrtf(a*a + b*b);
+    if(m > 2)
+        return(0);
     p = 0;
-    while(fabs(m) <= 2 && p <= 1000)
+    while(p <= 1000)
     {
         a = ((a*a) - (b*b)) + x;
         b = (2*a*b) + y;
-        m = sqrt(a*a + b*b);
-        fprintf(file,"some rule a:%f b: %f m: %f\n",a,b,m);
+        m = hypot(a,b);
+        if(m > 2)
+            return(0);
         p++;
     }
-    fclose(file);
-    if(p < 1000)
-        return(0);
     return(1);
 }
 
-int is_in_mandelbrot(double complex c)
+int is_in_mandelbrot(float complex c)
 {
-    double complex z;
-    FILE    *file;
-    fopen("mandelbrot.txt","w");
+    float complex z;
+    int i;
     
+    i = 0;
     z = 0;
-    for (int i = 0; i < 1000; i++) 
+    while ( i < 1000) 
     {
         z = z * z + c;
-        fprintf(file,"Mandelbrot a:%f b:%f m:%f\n", creal(z),cimag(z),cabs(z));
         if (cabs(z) > 2) 
-        {
-            fclose(file);
-            return 0;  
-        }
+            return(0);
+        i++;
     }
-    fclose(file);
-    return 1; 
+    return (1); 
 }
 
 int main()
