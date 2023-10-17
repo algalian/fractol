@@ -2,6 +2,7 @@
 #include<math.h>
 #include<stdlib.h>
 #include<stdio.h>
+#include<stdbool.h>
 
 typedef struct s_img
 {
@@ -37,6 +38,7 @@ typedef struct complex
 	double b;
 } complex;
 
+
 complex   ft_csum(complex x, complex y)
 {
 	complex z;
@@ -54,7 +56,7 @@ complex ft_csqrt(complex x)
 	return(z);    
 }
 
-int fractal_set(complex c)
+bool fractal_set(complex c)
 {
 	int     p;
 	complex z;
@@ -67,11 +69,11 @@ int fractal_set(complex c)
 		z = ft_csqrt(z);
 		z = ft_csum(z,c);
 		if(hypot(z.a, z.b)>2)
-			return(0);
+			return(false);
 		p++;
 
 	}
-	return(1);
+	return(true);
 }
 
 void close(t_data data)
@@ -79,20 +81,11 @@ void close(t_data data)
 	mlx_destroy_window(data.mlx,data.mlx_win);
 
 }
-t_data key_event(t_data *data)
-{   
 
-	if()
-		data->m.a += ;
-	if()
-		data->m.b -= ;
-	if() 
-		data->m.b += ;
-	if()
-		data->m.b -= 1 
-	if() 
-		close(data);
-	return(t_data);
+int key_event(t_data data)
+{   
+	close(data);
+	return(0);
 }
 
 void	img_pix_put(t_img *img, int x, int y, int color)
@@ -110,11 +103,11 @@ int render(t_data *data)
 	complex c;
 
 	y = 0;
-	c.b = ((data->rank_h/2) + data->m.a) * data->m.scale;
+	c.b = (data->rank_h/2)  * data->m.scale + data->m.b;
 	while(y <= data->h || c.b >= -2 * data->m.scale)
 	{
 		x = 0;
-		c.a = ((-data->rank_h/2) + data->m.b) * data->m.scale;
+		c.a = (-data->rank_h/2) * data->m.scale + data->m.a;
 		while(x <= data->w || c.a <= 2 * data->m.scale)
 		{
 			if(fractal_set(c) == 1)
@@ -138,14 +131,15 @@ int	main()
 	data.h = 800;
 	data.rank_h = 4;
 	data.rank_w = 4;
-	data.m.scale = 1;
-	data.m.a = 0;
-	data.m.b = 0;
+	data.m.scale = 0.4;
+	data.m.a = 1;
+	data.m.b = 1;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_key_hook(data.mlx_win, &key_event, &data);
 	mlx_loop(data.mlx);
+	
 	return(0);
-}
+} 
