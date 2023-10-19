@@ -10,8 +10,8 @@
 
 typedef struct complex
 {
-    float     x;
-    float     y;
+    float     a;
+    float     b;
 }	cmplx;
 
 typedef struct vector

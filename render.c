@@ -15,9 +15,9 @@ typedef struct s_img
 
 typedef struct move
 {
-    double	a;
-    double	b;
-    double	scale;
+    float	a;
+    float	b;
+    float	scale;
 } move;
 
 typedef struct s_data
@@ -28,7 +28,7 @@ typedef struct s_data
 	int     h;
 	float	rank_w;
 	float	rank_h;
-	t_img  img;
+	t_img  	img;
 	move	m;
 }	t_data;
 
@@ -104,18 +104,18 @@ int render(t_data *data)
 
 	y = 0;
 	c.b = (data->rank_h/2)  * data->m.scale + data->m.b;
-	while(y <= data->h || c.b >= -2 * data->m.scale)
+	while(y <= data->h)
 	{
 		x = 0;
-		c.a = (-data->rank_h/2) * data->m.scale + data->m.a;
-		while(x <= data->w || c.a <= 2 * data->m.scale)
+		c.a = (-data->rank_w/2) * data->m.scale + data->m.a;
+		while(x <= data->w)
 		{
-			if(fractal_set(c) == 1)
+			if(fractal_set(c) == 0  && (c.b > -2 && c.a < 2))
 				img_pix_put(&data->img,  x, y, 0x0000FF);
 			x++;
-			c.a += (data->rank_h/data->w)*data->m.scale;
+			c.a += (data->rank_w/data->w)*data->m.scale;
 		}
-		y++;
+		y++; 
 		c.b -= (data->rank_h/data->h)*data->m.scale;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.mlx_img, 0, 0);
@@ -131,15 +131,14 @@ int	main()
 	data.h = 800;
 	data.rank_h = 4;
 	data.rank_w = 4;
-	data.m.scale = 0.4;
-	data.m.a = 1;
-	data.m.b = 1;
+	data.m.scale = 0.0001;
+	data.m.a = 0.20005;
+	data.m.b = 0.55;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_key_hook(data.mlx_win, &key_event, &data);
 	mlx_loop(data.mlx);
-	
 	return(0);
 } 
