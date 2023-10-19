@@ -30,6 +30,7 @@ typedef struct s_data
 	float	rank_h;
 	t_img  	img;
 	move	m;
+	int		keycode;
 }	t_data;
 
 typedef struct complex
@@ -76,17 +77,13 @@ bool fractal_set(complex c)
 	return(true);
 }
 
-void close(t_data data)
+int	close(t_data data)
 {
+	printf("destroying\n");
 	mlx_destroy_window(data.mlx,data.mlx_win);
-
-}
-
-int key_event(t_data data)
-{   
-	close(data);
 	return(0);
 }
+
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
@@ -131,14 +128,13 @@ int	main()
 	data.h = 800;
 	data.rank_h = 4;
 	data.rank_w = 4;
-	data.m.scale = 0.0001;
-	data.m.a = 0.20005;
-	data.m.b = 0.55;
+	data.m.scale = 1;
+	data.m.a = 0;
+	data.m.b = 0;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_loop_hook(data.mlx, &render, &data);
-	mlx_key_hook(data.mlx_win, &key_event, &data);
 	mlx_loop(data.mlx);
 	return(0);
-} 
+}
