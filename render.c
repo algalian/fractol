@@ -14,6 +14,7 @@
 #include"X11/Xutil.h"
 #include"X11/tkIntXlibDecls.h"
 
+
 typedef struct s_img
 {
 	void	*mlx_img;
@@ -25,9 +26,9 @@ typedef struct s_img
 
 typedef struct move
 {
-    float	a;
-    float	b;
-    float	scale;
+    double	a;
+    double	b;
+    double	scale;
 } move;
 
 typedef struct s_data
@@ -48,6 +49,7 @@ typedef struct complex
 	float b;
 } complex;
 
+int render(t_data *data);
 
 complex   ft_csum(complex x, complex y)
 {
@@ -74,11 +76,11 @@ bool fractal_set(complex c)
 	z.a = 0;
 	z.b = 0;
 	p = 0;
-	while(p <= 1000)
+	while(p <= 100)
 	{
 		z = ft_csqrt(z);
 		z = ft_csum(z,c);
-		if(hypot(z.a, z.b)>2)
+		if(hypotf(z.a, z.b)>2)
 			return(false);
 		p++;
 
@@ -86,17 +88,37 @@ bool fractal_set(complex c)
 	return(true);
 }
 
+/*int zoom(int keycode)
+{
+	printf("%i\n", keycode);
+	return(0);
+
+}*/
+int key_event(int keycode, t_data *data)
+{
+	if(keycode == 53)
+	{
+		mlx_destroy_window(data->mlx,data->mlx_win); 
+		exit(1);
+	}
+	data->img.mlx_img = mlx_new_image(data->mlx,data->w,data->h);
+	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.line_len, &data->img.endian);
+	if(keycode == 0 || keycode == 123)
+		data->m.a = data->m.a - 0.05;
+	if(keycode == 2 || keycode == 124)
+		data->m.a =data->m.a + 0.05;
+	if(keycode == 13 || keycode == 126)
+		data->m.b = data->m.b + 0.05;
+	if(keycode == 1 || keycode == 125)
+		data->m.b = data->m.b - 0.05;
+	return(0);
+}
+
 int	close(t_data data)
 {
 	printf("closing\n");
 	mlx_destroy_window(data.mlx,data.mlx_win);
-	return(0);
-}
-
-int zoom(int keycode)
-{
-	if(keycode == 0)
-		printf("zoom triggered\n");
+	exit(1);
 	return(0);
 }
 
@@ -122,7 +144,7 @@ int render(t_data *data)
 		c.a = (-data->rank_w/2) * data->m.scale + data->m.a;
 		while(x <= data->w)
 		{
-			if(fractal_set(c) == 0  && (c.b > -2 && c.a < 2))
+			if(fractal_set(c) == 1 && (c.b > -2 && c.a < 2))
 				img_pix_put(&data->img,  x, y, 0x0000FF);
 			x++;
 			c.a += (data->rank_w/data->w)*data->m.scale;
@@ -149,9 +171,10 @@ int	main()
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
-	mlx_hook(data.mlx_win,2,0,&zoom,&data);
-	mlx_loop_hook(data.mlx, &render, &data);
+	mlx_hook(data.mlx_win,2, 0, &key_event, &data);
+	mlx_mouse_hook(data.mlx_win,&zoom,&data);
 	mlx_hook(data.mlx_win,17,0,&close,&data);
+	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_loop(data.mlx);
 	return(0);
 }
