@@ -15,6 +15,7 @@
 #include"X11/tkIntXlibDecls.h"
 
 
+
 typedef struct s_img
 {
 	void	*mlx_img;
@@ -37,16 +38,16 @@ typedef struct s_data
 	void	*mlx_win;
 	int     w;
 	int     h;
-	float	rank_w;
-	float	rank_h;
+	double	rank_w;
+	double	rank_h;
 	t_img  	img;
 	move	m;
 }	t_data;
 
 typedef struct complex
 {
-	float a;
-	float b;
+	double a;
+	double b;
 } complex;
 
 int render(t_data *data);
@@ -80,7 +81,7 @@ bool fractal_set(complex c)
 	{
 		z = ft_csqrt(z);
 		z = ft_csum(z,c);
-		if(hypotf(z.a, z.b)>2)
+		if(hypot(z.a, z.b)>2)
 			return(false);
 		p++;
 
@@ -88,12 +89,8 @@ bool fractal_set(complex c)
 	return(true);
 }
 
-/*int zoom(int keycode)
-{
-	printf("%i\n", keycode);
-	return(0);
 
-}*/
+
 int key_event(int keycode, t_data *data)
 {
 	if(keycode == 53)
@@ -111,6 +108,10 @@ int key_event(int keycode, t_data *data)
 		data->m.b = data->m.b + 0.05;
 	if(keycode == 1 || keycode == 125)
 		data->m.b = data->m.b - 0.05;
+	if(keycode == 69)
+		data->m.scale = data->m.scale - 0.005;
+	if(keycode == 78)
+		data->m.scale = data->m.scale + 0.005;
 	return(0);
 }
 
@@ -153,6 +154,7 @@ int render(t_data *data)
 		c.b -= (data->rank_h/data->h)*data->m.scale;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.mlx_img, 0, 0);
+	printf("%f\n",data->m.scale);
 	return(0);
 }
 
@@ -165,16 +167,14 @@ int	main()
 	data.h = 800;
 	data.rank_h = 4;
 	data.rank_w = 4;
-	data.m.scale = 1;
+	data.m.scale = 0.52;
 	data.m.a = 0;
 	data.m.b = 0;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_hook(data.mlx_win,2, 0, &key_event, &data);
-	mlx_mouse_hook(data.mlx_win,&zoom,&data);
-	mlx_hook(data.mlx_win,17,0,&close,&data);
+	mlx_hook(data.mlx_win,17, 0,&close,&data);
 	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_loop(data.mlx);
 	return(0);
-}
