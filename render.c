@@ -3,6 +3,16 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<stdbool.h>
+#include"X11/keysym.h"
+#include"X11/keysymdef.h"
+#include"X11/cursorfont.h"
+#include"X11/X.h"
+#include"X11/Xatom.h"
+#include"X11/xbytes.h"
+#include"X11/Xfuncproto.h"
+#include"X11/Xlib.h"
+#include"X11/Xutil.h"
+#include"X11/tkIntXlibDecls.h"
 
 typedef struct s_img
 {
@@ -30,13 +40,12 @@ typedef struct s_data
 	float	rank_h;
 	t_img  	img;
 	move	m;
-	int		keycode;
 }	t_data;
 
 typedef struct complex
 {
-	double a;
-	double b;
+	float a;
+	float b;
 } complex;
 
 
@@ -79,11 +88,17 @@ bool fractal_set(complex c)
 
 int	close(t_data data)
 {
-	printf("destroying\n");
+	printf("closing\n");
 	mlx_destroy_window(data.mlx,data.mlx_win);
 	return(0);
 }
 
+int zoom(int keycode)
+{
+	if(keycode == 0)
+		printf("zoom triggered\n");
+	return(0);
+}
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
@@ -134,7 +149,9 @@ int	main()
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
+	mlx_hook(data.mlx_win,2,0,&zoom,&data);
 	mlx_loop_hook(data.mlx, &render, &data);
+	mlx_hook(data.mlx_win,17,0,&close,&data);
 	mlx_loop(data.mlx);
 	return(0);
 }
