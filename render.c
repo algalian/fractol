@@ -109,9 +109,9 @@ int key_event(int keycode, t_data *data)
 	if(keycode == 1 || keycode == 125)
 		data->m.b = data->m.b - 0.05;
 	if(keycode == 69)
-		data->m.scale = data->m.scale - 0.005;
+		data->m.scale = data->m.scale - 0.05;
 	if(keycode == 78)
-		data->m.scale = data->m.scale + 0.005;
+		data->m.scale = data->m.scale + 0.05;
 	return(0);
 }
 
@@ -178,3 +178,4 @@ int	main()
 	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_loop(data.mlx);
 	return(0);
+}
