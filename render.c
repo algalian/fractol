@@ -1,13 +1,4 @@
-/**
- * The above code is a program that generates and displays a fractal image using the Mandelbrot set.
- * 
- * @param x The parameter "x" is used as a variable to iterate over the x-axis of the image being
- * rendered. It represents the current pixel position along the x-axis.
- * @param y The variable "y" is used as a counter for the y-coordinate of the pixel being rendered. It
- * starts at 0 and increments by 1 until it reaches the height of the image.
- * 
- * @return The main function is returning an integer value of 0.
- */
+
 #include<mlx.h>
 #include<stdlib.h>
 #include<stdio.h>
@@ -94,7 +85,7 @@ bool fractal_set(t_data *data)
 	{
 		z = ft_csqrt(z);
 		z = ft_csum(z,&data->c);
-		if(sqrt(z.a*z.a + z.b*z.b)>2)
+		if(sqrtf(z.a*z.a + z.b*z.b)>2)
 			return(false);
 		p++;
 	}
@@ -126,8 +117,10 @@ int key_event(int keycode, t_data *data)
 		data->m.b -= 0.15 * (2 * data->m.scale/0.95);
 	if(keycode == 69)
 		data->m.scale *= 0.95;
+		data->max_iter *= 1.01;
 	if(keycode == 78)
 		data->m.scale *= 1.05;
+		data->max_iter /= 0.99;
 	return(0);
 }
 
@@ -175,10 +168,10 @@ int	main()
 	data.h = 800;
 	data.rank_h = 4;
 	data.rank_w = 4;
-	data.m.scale = 0.05;
-	data.m.a = -0.79939982;
-	data.m.b = -0.16519870;
-	data.max_iter = 100;
+	data.m.scale = 1;
+	data.m.a = 0;
+	data.m.b = 0;
+	data.max_iter = 30;
 	data.c.a = -2;
 	data.c.b = 2;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
