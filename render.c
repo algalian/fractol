@@ -100,11 +100,21 @@ int	close(t_data data)
 	return(0);
 }
 
+int max(int a, int b)
+{
+	if(a > b)
+		return(a);
+	return(b);
+}
 
 int key_event(int keycode, t_data *data)
 {
+	static int i;
+	static int j;
+
 	if(keycode == 53)
 		close(*data);
+	mlx_destroy_image(data->mlx,data->img.mlx_img);
 	data->img.mlx_img = mlx_new_image(data->mlx,data->w,data->h);
 	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.line_len, &data->img.endian);
 	if(keycode == 0 || keycode == 123)
@@ -116,11 +126,25 @@ int key_event(int keycode, t_data *data)
 	if(keycode == 1 || keycode == 125)
 		data->m.b -= 0.15 * (2 * data->m.scale/0.95);
 	if(keycode == 69)
+	{
 		data->m.scale *= 0.95;
-		data->max_iter *= 1.01;
+		if(data->m.scale < 1)
+		{
+			i++;
+			if(i % 10 == 0)
+				data->max_iter++;
+		}
+	}
 	if(keycode == 78)
+	{
 		data->m.scale *= 1.05;
-		data->max_iter /= 0.99;
+		if(data->m.scale < 1)
+		{
+			j++;
+			if(j % 10 == 0)
+				data->max_iter--;
+		}
+	}
 	return(0);
 }
 
