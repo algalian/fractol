@@ -49,12 +49,12 @@ typedef struct s_data
 	double	rank_h;
 	t_img  	img;
 	move	m;
-	int		max_iter;
 	complex c;
+	int		max_iter;
+	int		in_mod;
+	int		out_mod;
+	int		color;
 }	t_data;
-
-
-int render(t_data *data);
 
 complex   ft_csum(complex x, complex *y)
 {
@@ -73,47 +73,19 @@ complex ft_csqrt(complex x)
 	return(z);    
 }
 
-bool fractal_set(t_data *data)
-{
-	int     p;
-	complex z;
-
-	z.a = 0;
-	z.b = 0;
-	p = 0;
-	while(p <= data->max_iter)
-	{
-		z = ft_csqrt(z);
-		z = ft_csum(z,&data->c);
-		if(sqrtf(z.a*z.a + z.b*z.b)>2)
-			return(false);
-		p++;
-	}
-	return(true);
-}
-
-int	close(t_data data)
+int	close(t_data *data)
 {
 	printf("closing\n");
-	mlx_destroy_window(data.mlx,data.mlx_win);
+	mlx_destroy_window(data->mlx,data->mlx_win);
 	exit(1);
 	return(0);
 }
 
-int max(int a, int b)
-{
-	if(a > b)
-		return(a);
-	return(b);
-}
-
 int key_event(int keycode, t_data *data)
 {
-	static int i;
-	static int j;
 
 	if(keycode == 53)
-		close(*data);
+		close(data);
 	mlx_destroy_image(data->mlx,data->img.mlx_img);
 	data->img.mlx_img = mlx_new_image(data->mlx,data->w,data->h);
 	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.line_len, &data->img.endian);
@@ -130,8 +102,8 @@ int key_event(int keycode, t_data *data)
 		data->m.scale *= 0.95;
 		if(data->m.scale < 1)
 		{
-			i++;
-			if(i % 10 == 0)
+			data->in_mod++;
+			if(data->in_mod % 3 == 0)
 				data->max_iter++;
 		}
 	}
@@ -140,8 +112,8 @@ int key_event(int keycode, t_data *data)
 		data->m.scale *= 1.05;
 		if(data->m.scale < 1)
 		{
-			j++;
-			if(j % 10 == 0)
+			data->out_mod++;
+			if(data->out_mod % 3 == 0)
 				data->max_iter--;
 		}
 	}
@@ -154,6 +126,25 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	
 	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int *)pixel = color;
+}
+
+void fractal_set(t_data *data, int x, int y)
+{
+	int     p;
+	complex z;
+
+	z.a = 0;
+	z.b = 0;
+	p = 0;
+	while(p <= data->max_iter)
+	{
+		z = ft_csqrt(z);
+		z = ft_csum(z,&data->c);
+		if(z.a*z.a + z.b*z.b>2)
+			break;
+		p++;
+	}
+	img_pix_put(&data->img, x, y, ((0xFFFFFF-0x000000)/30)*p);
 }
 
 int render(t_data *data)
@@ -169,10 +160,7 @@ int render(t_data *data)
 		data->c.a = -data->rank_w/2 * data->m.scale + data->m.a;
 		while(x < data->w && data->c.a < 2)
 		{
-			if(fractal_set(data) == 1)
-				img_pix_put(&data->img,  x, y, 0x0000FF);
-			if(x == data->w/2 && y == data->h/2)
-				img_pix_put(&data->img,x,y,0xFF0000);
+			fractal_set(data,x,y);
 			x++;
 			data->c.a += (data->rank_w/data->w) * data->m.scale;
 		}
@@ -198,6 +186,8 @@ int	main()
 	data.max_iter = 30;
 	data.c.a = -2;
 	data.c.b = 2;
+	data.in_mod = 0;
+	data.out_mod = 0;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
