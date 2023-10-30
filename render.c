@@ -229,6 +229,9 @@ int	main()
 	data.max_iter = 20;
 	data.c.a = -2;
 	data.c.b = 2;
+	data.user.choice = "julia"; ///prompt
+	data.user.c.a = 0;			//	
+	data.user.c.b = 0;			//
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
