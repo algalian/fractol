@@ -67,6 +67,86 @@ typedef struct s_data
 	prompt 	user;
 }	t_data;
 
+int	ft_isdigit(int n)
+{
+	if (n >= '0' && n <= '9')
+	{
+		return (1);
+	}
+	return (0);
+}
+static int	ft_blanks(char c)
+{
+	if ((c >= 9 && c <= 13) || c == ' ')
+	{
+		return (1);
+	}
+	return (0);
+}
+
+static int	clean_string(const char *str, unsigned int i)
+{
+	if (ft_isdigit(str[i]) == 1)
+		return (i);
+	if (ft_blanks(str[i]) != 1 && (str[i] != '+' && str[i] != '-'))
+		if (ft_isdigit(str[i]) != 1)
+			return (-1);
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (ft_isdigit(str[i + 1]) != 1)
+			return (-1);
+		return (i + 1);
+	}
+	if (ft_blanks(str[i]) == 1)
+	{
+		while (ft_blanks(str[i]) == 1)
+			i++;
+		return (clean_string(str, i));
+	}
+	return (-1);
+}
+
+static int	sign(const char *str, unsigned int i)
+{
+	if (i == 0)
+		return (1);
+	if (str[i - 1] == '-')
+	{
+		return (-1);
+	}
+	return (1);
+}
+
+double	ft_atof(const char *str)
+{
+	int		i;
+	double	num;
+	double	nextf;
+	int		pos;
+	
+	i = clean_string(str, 0);
+	if(i < 0)
+	{
+		printf("FAIL");
+		exit(1);
+	}
+	num = str[i] - '0';
+	i++;
+	while (ft_isdigit(str[i]) == 1)
+	{
+		nextf = str[i++] - '0';
+		num = num * 10 + nextf;
+	}
+	i++;
+	pos = 0;
+	while (ft_isdigit(str[i]) == 1)
+	{
+		nextf = str[i++] - '0';
+		num = num * 10 + nextf;
+		pos++;
+	}
+	return (num * sign(str, clean_string(str, 0)) / pow(10, pos));
+}
 complex   ft_csum(complex x, complex y)
 {
 	complex z;
@@ -213,11 +293,38 @@ int	render(t_data *data)
 	return(0);
 }
 
-int	main()
+void	parse_prompt(t_data *data, int argc, char **argv)
+{
+	if(argc != 4 && argc != 2)
+	{
+		printf("Invalid arg number");
+		exit(1);
+	}
+	if(argc == 2)
+	{
+		if(strcmp(argv[1], "mandelbrot") != 0)
+		{
+			printf("Invalid fractal set");
+			exit(1);
+		}
+		data->user.choice = calloc(11,sizeof(char));
+		return;
+	}
+	if(strcmp(argv[1], "julia") != 0)
+	{
+		printf("Invalid fractal set");
+		exit(1);
+	}
+	data->user.c.a = ft_atof(argv[2]);
+	data->user.c.b = ft_atof(argv[3]);
+	data->user.choice = calloc(6,sizeof(char));
+}
+
+int	main(int argc, char **argv)
 {
 	t_data  data;
 
-
+	parse_prompt(&data, argc, argv);
 	data.mlx = mlx_init();
 	data.w = 800;
 	data.h = 800;
@@ -229,9 +336,6 @@ int	main()
 	data.max_iter = 20;
 	data.c.a = -2;
 	data.c.b = 2;
-	data.user.choice = "julia"; ///prompt
-	data.user.c.a = 0;			//	
-	data.user.c.b = 0;			//
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
