@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<stdbool.h>
+#include<string.h>
 #include"X11/keysym.h"
 #include"X11/keysymdef.h"
 #include"X11/cursorfont.h"
@@ -46,7 +47,7 @@ typedef struct complex
 
 typedef struct prompt
 {
-	char 	**choice;
+	char 	*choice;
 	complex c;
 } prompt;
 
@@ -58,21 +59,19 @@ typedef struct s_data
 	int     h;
 	double	rank_w;
 	double	rank_h;
+	int		max_iter;
+	int		color;
 	t_img  	img;
 	move	m;
 	complex c;
-	int		max_iter;
-	int		in_mod;
-	int		out_mod;
-	int		color;
 	prompt 	user;
 }	t_data;
 
-complex   ft_csum(complex x, complex *y)
+complex   ft_csum(complex x, complex y)
 {
 	complex z;
-	z.a = x.a + y->a;
-	z.b = x.b + y->b;
+	z.a = x.a + y.a;
+	z.b = x.b + y.b;
 	return(z);
 }
 
@@ -119,11 +118,21 @@ int key_event(int keycode, t_data *data)
 		data->max_iter -= 10;
 		printf("iterations: %d\n", data->max_iter);
 	}
+	if(keycode == 84)
+		data->user.c.b = data->user.c.b - 0.01;
+	if(keycode == 91)
+		data->user.c.b =  data->user.c.b + 0.01;
+	if(keycode == 86)
+		data->user.c.a = data->user.c.a - 0.01;
+	if(keycode == 88)
+		data->user.c.a = data->user.c.a + 0.01;
 	return(0);
 }
 
 int	mouse_hook(int button, int x, int y, t_data *data)
 {
+	x = 0;
+	y = 0;
 	mlx_destroy_image(data->mlx,data->img.mlx_img);
 	data->img.mlx_img = mlx_new_image(data->mlx,data->w,data->h);
 	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.line_len, &data->img.endian);
@@ -131,11 +140,6 @@ int	mouse_hook(int button, int x, int y, t_data *data)
 		data->m.scale *= 0.95;
 	if(button == 5)
 		data->m.scale *= 1.1;
-	if(button == 1 || button == 2)
-	{
-		data->c.b = data->c.b + y * (data->rank_h/data->h);
-		data->c.a = data->c.a + x * (data->rank_w/data->w);
-	}
 	return(0); 
 }
 
@@ -147,23 +151,32 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)pixel = color;
 }
 
-
-
-
 void fractal_set(t_data *data, int x, int y)
 {
 	int		p;
 	complex z;
+	complex c; 
 	int color;
 
-	z.a = 0;
-	z.b = 0;
-	julia(data,z);
+	if(strcmp(data->user.choice,"mandelbrot") == 0)
+	{
+		c.a = data->c.a;
+		c.b = data->c.b;
+		z.a = 0;
+		z.b = 0;
+	}
+	else if(strcmp(data->user.choice,"julia") == 0)
+	{
+		c.a = data->user.c.a;
+		c.b = data->user.c.b;
+		z.a = data->c.a;
+		z.b = data->c.b;
+	}
 	p = 0;
 	while(p < data->max_iter)
 	{
 		z = ft_csqrt(z);
-		z = ft_csum(z,&data->c);
+		z = ft_csum(z,c);
 		if(z.a*z.a + z.b*z.b > 4)
 		{	
 			color = p*((RED - GREEN)/data->max_iter);
@@ -176,7 +189,7 @@ void fractal_set(t_data *data, int x, int y)
 	return;
 }
 
-int render(t_data *data)
+int	render(t_data *data)
 {
 	int	x;
 	int	y;
@@ -204,6 +217,7 @@ int	main()
 {
 	t_data  data;
 
+
 	data.mlx = mlx_init();
 	data.w = 800;
 	data.h = 800;
@@ -215,8 +229,6 @@ int	main()
 	data.max_iter = 20;
 	data.c.a = -2;
 	data.c.b = 2;
-	data.user.choice = "julia";
-	data.user.c = 
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
