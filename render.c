@@ -127,7 +127,7 @@ double	ft_atof(const char *str)
 	i = clean_string(str, 0);
 	if(i < 0)
 	{
-		printf("FAIL");
+		printf("Please specify a numeric value");
 		exit(1);
 	}
 	num = str[i] - '0';
@@ -307,7 +307,6 @@ void	parse_prompt(t_data *data, int argc, char **argv)
 			printf("Invalid fractal set");
 			exit(1);
 		}
-		data->user.choice = calloc(11,sizeof(char));
 		return;
 	}
 	if(strcmp(argv[1], "julia") != 0)
@@ -317,25 +316,29 @@ void	parse_prompt(t_data *data, int argc, char **argv)
 	}
 	data->user.c.a = ft_atof(argv[2]);
 	data->user.c.b = ft_atof(argv[3]);
-	data->user.choice = calloc(6,sizeof(char));
 }
-
+void	fractol_init(t_data *data, char **argv)
+{
+	data->w = 800;
+	data->h = 800;
+	data->rank_h = 4;
+	data->rank_w = 4;
+	data->m.scale = 1;
+	data->m.a = 0;
+	data->m.b = 0;
+	data->max_iter = 20;
+	data->c.a = -2;
+	data->c.b = 2;
+	data->user.choice = calloc(11, sizeof(char));
+	strcpy(data->user.choice, argv[1]);
+}
 int	main(int argc, char **argv)
 {
 	t_data  data;
 
 	parse_prompt(&data, argc, argv);
+	fractol_init(&data, argv);
 	data.mlx = mlx_init();
-	data.w = 800;
-	data.h = 800;
-	data.rank_h = 4;
-	data.rank_w = 4;
-	data.m.scale = 1;
-	data.m.a = 0;
-	data.m.b = 0;
-	data.max_iter = 20;
-	data.c.a = -2;
-	data.c.b = 2;
 	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
