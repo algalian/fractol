@@ -3,14 +3,18 @@
 NAME		= fractol
 
 
-SRCS		= render.c
+SRCS		= main.c \
+			  events.c \
+			  sets.c \
+			  utils.c \
+			  render.c \
 
 OBJS		= $(SRCS:%.c=%.o)
 
 
 LIBFT		= libft/libft.a
 CC			= gcc
-CFLAGS		= -Wall -Werror -Wextra -Imlx -I include -I libft -g3 -O2 -DSTRINGPUTX11
+CFLAGS		= -Wall -Werror -Wextra -Imlx -I include -I libft -g3 -O2 -DSTRINGPUTX11 
 MINI		= -L./mlx -lmlx -framework OpenGL -framework AppKit 
 
 
