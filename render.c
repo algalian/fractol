@@ -1,5 +1,4 @@
 
-#include"mlx/mlx.h"
 #include<mlx.h>
 #include<stdlib.h>
 #include<stdio.h>
@@ -47,7 +46,7 @@ typedef struct complex
 
 typedef struct prompt
 {
-	char 	*choice;
+	char 	choice;
 	complex c;
 } prompt;
 
@@ -238,14 +237,14 @@ void fractal_set(t_data *data, int x, int y)
 	complex c; 
 	int color;
 
-	if(strcmp(data->user.choice,"mandelbrot") == 0)
+	if(data->user.choice == 'm')
 	{
 		c.a = data->c.a;
 		c.b = data->c.b;
 		z.a = 0;
 		z.b = 0;
 	}
-	else if(strcmp(data->user.choice,"julia") == 0)
+	else if(data->user.choice == 'j')
 	{
 		c.a = data->user.c.a;
 		c.b = data->user.c.b;
@@ -259,7 +258,7 @@ void fractal_set(t_data *data, int x, int y)
 		z = ft_csum(z,c);
 		if(z.a*z.a + z.b*z.b > 4)
 		{	
-			color = p*((RED - GREEN)/data->max_iter);
+			color = p*((WHITE - BLACK)/data->max_iter);
 			img_pix_put(&data->img,x,y,color);
 			return;
 		}
@@ -329,8 +328,10 @@ void	fractol_init(t_data *data, char **argv)
 	data->max_iter = 20;
 	data->c.a = -2;
 	data->c.b = 2;
-	data->user.choice = calloc(11, sizeof(char));
-	strcpy(data->user.choice, argv[1]);
+	if(strcmp(argv[1], "mandelbrot") == 0)
+		data->user.choice = 'm';
+	if(strcmp(argv[1], "julia") == 0)
+		data->user.choice = 'j';
 }
 int	main(int argc, char **argv)
 {
@@ -339,7 +340,7 @@ int	main(int argc, char **argv)
 	parse_prompt(&data, argc, argv);
 	fractol_init(&data, argv);
 	data.mlx = mlx_init();
-	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, "Una ventana");
+	data.mlx_win = mlx_new_window(data.mlx, data.w, data.h, argv[1]);
 	data.img.mlx_img = mlx_new_image(data.mlx, data.w, data.h);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_hook(data.mlx_win,2, 0, &key_event, &data);
