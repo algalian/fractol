@@ -1,90 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: algalian <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 20:47:03 by algalian          #+#    #+#             */
-/*   Updated: 2023/11/02 20:47:11 by algalian         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include"fractol.h"
 
-#include "fractol.h"
-
-int	ft_isdigit(int n)
+void    you_are_here(t_data *data)
 {
-	if (n >= '0' && n <= '9')
-	{
-		return (1);
-	}
-	return (0);
+    ft_printf("center a:%s b:%s zoom: %s", ft_ftoa(data->m.a), ft_ftoa(data->m.b),ft_ftoa(data->m.scale));
+    if(data->user.choice != 'm')
+        ft_printf(" (julia set: %s %s)",ft_ftoa(data->user.c.a),ft_ftoa(data->user.c.b));  
+    ft_printf("\n");
 }
 
-static int	ft_blanks(char c)
+int ft_close()
 {
-	if ((c >= 9 && c <= 13) || c == ' ')
-	{
-		return (1);
-	}
-	return (0);
+	ft_printf("closing\n");
+	exit(1);
+	return(1);
 }
 
-static int	clean_string(const char *str, unsigned int i)
-{
-	if (ft_isdigit(str[i]) == 1)
-		return (i);
-	if (ft_blanks(str[i]) != 1 && (str[i] != '+' && str[i] != '-'))
-		if (ft_isdigit(str[i]) != 1)
-			return (-1);
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (ft_isdigit(str[i + 1]) != 1)
-			return (-1);
-		return (i + 1);
-	}
-	if (ft_blanks(str[i]) == 1)
-	{
-		while (ft_blanks(str[i]) == 1)
-			i++;
-		return (clean_string(str, i));
-	}
-	return (-1);
-}
 
-static int	sign(const char *str, unsigned int i)
-{
-	if (i == 0)
-		return (1);
-	if (str[i - 1] == '-')
-	{
-		return (-1);
-	}
-	return (1);
-}
-
-double	ft_atof(const char *str)
-{
-	int		i;
-	double	num;
-	double	nextf;
-	int		pos;
-
-	i = clean_string(str, 0);
-	if (i < 0)
-		exit(ft_error(3));
-	num = str[i] - '0';
-	while (ft_isdigit(str[i + 1]) == 1)
-	{
-		nextf = str[i++] - '0';
-		num = num * 10 + nextf;
-	}
-	pos = 0;
-	while (ft_isdigit(str[i + 1]) == 1)
-	{
-		nextf = str[i++] - '0';
-		num = num * 10 + nextf;
-		pos++;
-	}
-	return (num * sign(str, clean_string(str, 0)) / pow(10, pos));
-}

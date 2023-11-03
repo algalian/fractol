@@ -15,16 +15,6 @@
 
 # include<mlx.h>
 # include<stdbool.h>
-# include"X11/keysym.h"
-# include"X11/keysymdef.h"
-# include"X11/cursorfont.h"
-# include"X11/X.h"
-# include"X11/Xatom.h"
-# include"X11/xbytes.h"
-# include"X11/Xfuncproto.h"
-# include"X11/Xlib.h"
-# include"X11/Xutil.h"
-# include"X11/tkIntXlibDecls.h"
 # include<math.h>
 # include"libft.h"
 
@@ -55,6 +45,12 @@
 # define ENHANCE		10
 # define WHEEL_UP		4
 # define WHEEL_DOWN		5
+# define SPACE			49
+# define TrippySunset  0xD76BFF
+# define ElectricDream 0xFFD76B
+# define PsychedelicNeon 0x80FF00
+# define Cosmicoyage	0x0B3954
+# define AuroraBorealis 0x3E7A92
 
 typedef struct img
 {
@@ -106,15 +102,13 @@ typedef struct s_data
 	t_prompt	user;
 }	t_data;
 
-int		ft_close(t_data *data);
+int		ft_close();
 int		key_event(int keycode, t_data *data);
 int		mouse_hook(int button, int x, int y, t_data *data);
-double	ft_atof(const char *str);
 void	img_pix_put(t_img *img, int x, int y, int color);
 int		render(t_data *data);
-int		parse_prompt(t_data *data, int argc, char **argv);
-void	fractol_init(t_data *data, char **argv);
 void	fractal_set(t_data *data, int x, int y);
 int		ft_error(int errorid);
+void	you_are_here(t_data *data);
 
 #endif

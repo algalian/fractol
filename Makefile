@@ -15,7 +15,7 @@ OBJS		= $(SRCS:%.c=%.o)
 LIBFT		= libft/libft.a
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra -Imlx -I include -I libft -g3 -O2 -DSTRINGPUTX11 
-MINI		= -L./mlx -lmlx -framework OpenGL -framework AppKit 
+MINI		= -lmlx -framework OpenGL -framework AppKit 
 
 
 ${NAME}: ${OBJS}
@@ -30,7 +30,6 @@ all: $(NAME)
 
 clean:
 	@make clean -sC libft
-	@make clean -sC mlx
 	@rm -rf $(OBJS)
 
 fclean: clean

@@ -63,7 +63,7 @@ void	fractal_set(t_data *data, int x, int y)
 		q.z = ft_csum(q.z, q.c);
 		if (q.z.a * q.z.a + q.z.b * q.z.b > 4)
 		{	
-			color = p * ((WHITE - BLACK) / data->max_iter);
+			color = p * (WHITE / data->max_iter);
 			img_pix_put(&data->img, x, y, color);
 			return ;
 		}

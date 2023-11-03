@@ -12,15 +12,6 @@
 
 #include "fractol.h"
 
-int	ft_close(t_data *data)
-{
-	mlx_destroy_image(data->mlx, data->img.addr);
-	mlx_destroy_window(data->mlx, data->mlx_win);
-	ft_printf("closing\n");
-	exit(1);
-	return (0);
-}
-
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
 	char	*pixel;

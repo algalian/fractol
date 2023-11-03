@@ -12,7 +12,7 @@
 
 #include"fractol.h"
 
-void	move(int keycode, t_data *data)
+static void	move(int keycode, t_data *data)
 {
 	if (keycode == A || keycode == LEFT)
 		data->m.a -= 0.15 * (2 * data->m.scale / 0.95);
@@ -24,7 +24,7 @@ void	move(int keycode, t_data *data)
 		data->m.b -= 0.15 * (2 * data->m.scale / 0.95);
 }
 
-void	enhance(int keycode, t_data *data)
+static void	enhance(int keycode, t_data *data)
 {
 	if ((keycode == E || keycode == PLUS) && data->m.scale <= 1)
 	{
@@ -38,7 +38,7 @@ void	enhance(int keycode, t_data *data)
 	}
 }
 
-void	julia(int keycode, t_data *data)
+static void	julia(int keycode, t_data *data)
 {
 	if (keycode == C_DOWN)
 		data->user.c.b = data->user.c.b - 0.05;
@@ -61,6 +61,8 @@ int	key_event(int keycode, t_data *data)
 	move(keycode, data);
 	enhance(keycode, data);
 	julia(keycode, data);
+	if (keycode == 49)
+		you_are_here(data);
 	return (0);
 }
 

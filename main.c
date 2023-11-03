@@ -18,20 +18,20 @@ int	ft_error(int errorid)
 	{
 		ft_printf("Wrong number of arguments. ");
 		ft_printf("Please, type either 'mandelbrot'");
-		ft_printf("or 'julia' along a complex value");
+		ft_printf("or 'julia' along a complex value\n");
 	}
 	if (errorid == 2)
 	{
 		ft_printf("Wrong fractal set. ");
 		ft_printf("Please, type either 'mandelbrot'");
-		ft_printf("or 'julia' along a complex value");
+		ft_printf("or 'julia' along a complex value\n");
 	}
 	if (errorid == 3)
-		ft_printf("Please specify numeric values for Julia set");
+		ft_printf("Please specify numeric values for Julia set\n");
 	return (1);
 }
 
-int	parse_prompt(t_data *data, int argc, char **argv)
+static int	parse_prompt(t_data *data, int argc, char **argv)
 {
 	if (argc != 4 && argc != 2)
 		return (ft_error(1));
@@ -48,7 +48,7 @@ int	parse_prompt(t_data *data, int argc, char **argv)
 	return (0);
 }
 
-void	fractol_init(t_data *data, char **argv)
+static void	fractol_init(t_data *data, char **argv)
 {
 	data->w = WIDTH;
 	data->h = HEIGHT;
