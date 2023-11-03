@@ -12,27 +12,37 @@
 
 #include"fractol.h"
 
+int	ft_error(int errorid)
+{
+	if (errorid == 1)
+	{
+		ft_printf("Wrong number of arguments. ");
+		ft_printf("Please, type either 'mandelbrot'");
+		ft_printf("or 'julia' along a complex value");
+	}
+	if (errorid == 2)
+	{
+		ft_printf("Wrong fractal set. ");
+		ft_printf("Please, type either 'mandelbrot'");
+		ft_printf("or 'julia' along a complex value");
+	}
+	if (errorid == 3)
+		ft_printf("Please specify numeric values for Julia set");
+	return (1);
+}
+
 int	parse_prompt(t_data *data, int argc, char **argv)
 {
 	if (argc != 4 && argc != 2)
-	{
-		ft_printf("Invalid arg number");
-		return (1);
-	}
+		return (ft_error(1));
 	if (argc == 2)
 	{
 		if (ft_strncmp(argv[1], "mandelbrot", ft_strlen(argv[1])) != 0)
-		{
-			ft_printf("Invalid fractal set");
-			return (1);
-		}
+			return (ft_error(2));
 		return (0);
 	}
 	if (ft_strncmp(argv[1], "julia", ft_strlen(argv[1])) != 0)
-	{
-		ft_printf("Invalid fractal set");
-		return (1);
-	}
+		return (ft_error(2));
 	data->user.c.a = ft_atof(argv[2]);
 	data->user.c.b = ft_atof(argv[3]);
 	return (0);
@@ -71,7 +81,6 @@ int	main(int argc, char **argv)
 	mlx_hook(data.mlx_win, 2, 0, &key_event, &data);
 	mlx_hook(data.mlx_win, 17, 0, &ft_close, &data);
 	mlx_mouse_hook(data.mlx_win, mouse_hook, &data);
-	system("leaks fractol");
 	mlx_loop_hook(data.mlx, &render, &data);
 	mlx_loop(data.mlx);
 	return (0);

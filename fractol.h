@@ -115,5 +115,6 @@ int		render(t_data *data);
 int		parse_prompt(t_data *data, int argc, char **argv);
 void	fractol_init(t_data *data, char **argv);
 void	fractal_set(t_data *data, int x, int y);
+int		ft_error(int errorid);
 
 #endif

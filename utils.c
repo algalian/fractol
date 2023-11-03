@@ -72,10 +72,7 @@ double	ft_atof(const char *str)
 
 	i = clean_string(str, 0);
 	if (i < 0)
-	{
-		ft_printf("Please specify a numeric value");
-		exit(1);
-	}
+		exit(ft_error(3));
 	num = str[i] - '0';
 	while (ft_isdigit(str[i + 1]) == 1)
 	{
