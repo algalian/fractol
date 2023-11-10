@@ -48,6 +48,18 @@ static int	parse_prompt(t_data *data, int argc, char **argv)
 	return (0);
 }
 
+static int	*palette_init(void)
+{
+	int		*arr;
+
+	arr = malloc (sizeof(int) * 6);
+	arr[0] = WHITE;
+	arr[1] = RED;
+	arr[2] = GREEN;
+	arr[3] = BLUE;
+	return (arr);
+}
+
 static void	fractol_init(t_data *data, char **argv)
 {
 	data->w = WIDTH;
@@ -60,6 +72,8 @@ static void	fractol_init(t_data *data, char **argv)
 	data->max_iter = 20;
 	data->c.a = data->rank_h / 2;
 	data->c.b = data->rank_w / 2;
+	data->color = 0;
+	data->palette = palette_init();
 	if (ft_strncmp(argv[1], "mandelbrot", ft_strlen("mandelbrot")) == 0)
 		data->user.choice = 'm';
 	if (ft_strncmp(argv[1], "julia", ft_strlen("julia")) == 0)

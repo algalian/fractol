@@ -46,11 +46,6 @@
 # define RED				0xFF0000
 # define GREEN				0x00FF00
 # define BLUE				0x0000FF
-# define TrippySunset		0xD76BFF
-# define ElectricDream		0xFFD76B
-# define PsychedelicNeon	0x80FF00
-# define Cosmicoyage		0x0B3954
-# define AuroraBorealis		0x3E7A92
 
 typedef struct img
 {
@@ -95,6 +90,7 @@ typedef struct s_data
 	double		rank_w;
 	double		rank_h;
 	int			max_iter;
+	int			*palette;
 	int			color;
 	t_img		img;
 	t_move		m;
@@ -102,7 +98,7 @@ typedef struct s_data
 	t_prompt	user;
 }	t_data;
 
-int		ft_close();
+int		ft_close(void);
 int		key_event(int keycode, t_data *data);
 int		mouse_hook(int button, int x, int y, t_data *data);
 void	img_pix_put(t_img *img, int x, int y, int color);
@@ -110,5 +106,6 @@ int		render(t_data *data);
 void	fractal_set(t_data *data, int x, int y);
 int		ft_error(int errorid);
 void	you_are_here(t_data *data);
+void	palette(int keycode, t_data *data);
 
 #endif

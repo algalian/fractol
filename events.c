@@ -53,7 +53,7 @@ static void	julia(int keycode, t_data *data)
 int	key_event(int keycode, t_data *data)
 {
 	if (keycode == ESC)
-		ft_close(data);
+		ft_close();
 	mlx_destroy_image(data->mlx, data->img.mlx_img);
 	data->img.mlx_img = mlx_new_image(data->mlx, data->w, data->h);
 	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp,
@@ -61,6 +61,7 @@ int	key_event(int keycode, t_data *data)
 	move(keycode, data);
 	enhance(keycode, data);
 	julia(keycode, data);
+	palette(keycode, data);
 	if (keycode == 49)
 		you_are_here(data);
 	return (0);
