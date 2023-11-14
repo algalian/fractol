@@ -14,8 +14,8 @@
 
 void	you_are_here(t_data *data)
 {
-	ft_printf("center a:%s b:%s zoom: %s",
-		ft_ftoa(data->m.a), ft_ftoa(data->m.b), ft_ftoa(data->m.scale));
+	ft_printf("you are here-> a:%s b:%s zoom: %s",
+		ft_ftoa(data->m.a), ft_ftoa(data->m.b), ft_ftoa(1 - data->m.scale));
 	if (data->user.choice != 'm')
 		ft_printf(" (julia set: %s %s)",
 			ft_ftoa(data->user.c.a), ft_ftoa(data->user.c.b));
@@ -31,7 +31,7 @@ int	ft_close(void)
 
 void	palette(int keycode, t_data *data)
 {
-	if (keycode == 36)
+	if (keycode == ENTER)
 	{
 		if (data->color < 3)
 			data->color++;

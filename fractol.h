@@ -40,6 +40,7 @@
 # define ENHANCE			10
 # define WHEEL_UP			4
 # define WHEEL_DOWN			5
+# define ENTER				36
 # define SPACE				49
 # define BLACK				0x000000
 # define WHITE				0xFFFFFF

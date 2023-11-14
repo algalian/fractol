@@ -52,7 +52,7 @@ static int	*palette_init(void)
 {
 	int		*arr;
 
-	arr = malloc (sizeof(int) * 6);
+	arr = malloc (sizeof(int) * 4);
 	arr[0] = WHITE;
 	arr[1] = RED;
 	arr[2] = GREEN;
