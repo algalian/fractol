@@ -37,11 +37,13 @@ static int	parse_prompt(t_data *data, int argc, char **argv)
 		return (ft_error(1));
 	if (argc == 2)
 	{
-		if (ft_strncmp(argv[1], "mandelbrot", ft_strlen(argv[1])) != 0)
+		if (ft_strncmp(argv[1], "mandelbrot", ft_strlen(argv[1])) != 0
+			|| ft_strncmp(argv[1], "mandelbrot", ft_strlen("mandelbrot")))
 			return (ft_error(2));
 		return (0);
 	}
-	if (ft_strncmp(argv[1], "julia", ft_strlen(argv[1])) != 0)
+	if (ft_strncmp(argv[1], "julia", ft_strlen(argv[1])) != 0
+		|| ft_strncmp(argv[1], "julia", ft_strlen("julia")))
 		return (ft_error(2));
 	data->user.c.a = ft_atof(argv[2]);
 	data->user.c.b = ft_atof(argv[3]);
